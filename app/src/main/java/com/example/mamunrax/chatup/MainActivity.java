@@ -12,13 +12,14 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
 
 
     }
@@ -27,22 +28,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (checkConnection(MainActivity.this)){
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
             if (currentUser == null){
                 sentToLogin();
             }
         }else {
-            //Intent noInternet = new Intent(MainActivity.this, No_Internet.class);
-            //startActivity(noInternet);
-            //finish();
+            Intent noInternet = new Intent(MainActivity.this, No_Internet.class);
+            startActivity(noInternet);
+            finish();
         }
     }
 
+    //------send to start Activity method------
     private void sentToLogin() {
+        Intent sentToLogin = new Intent(MainActivity.this, StartActivity.class);
+        startActivity(sentToLogin);
+        sentToLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
 
     }
 
-
+    //-----Check Internet Connection Method------
     public static boolean checkConnection(Context context){
 
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
