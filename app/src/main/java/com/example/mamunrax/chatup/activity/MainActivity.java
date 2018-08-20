@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         if (item.getItemId() == R.id.accoutnSetting){
-
+            Intent settingActivity = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settingActivity);
         }
         if (item.getItemId() == R.id.allUsers){
 

@@ -26,6 +26,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -36,9 +41,11 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextInputEditText mEmail;
     private TextInputEditText mPassword;
     private TextInputEditText mConfPassword;
+    private TextInputEditText userName;
 
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +54,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+
         createNewAccount = findViewById(R.id.createNewAccount);
         iHaveAlreadyAccount = findViewById(R.id.iHaveAlreadyAccount);
         mEmail = (TextInputEditText)findViewById(R.id.emailAddress);
         mPassword = (TextInputEditText) findViewById(R.id.password);
         mConfPassword = (TextInputEditText) findViewById(R.id.ConfirmPass);
+        userName = (TextInputEditText) findViewById(R.id.userName);
         onCreateBtn = findViewById(R.id.signIn_Btn);
 
         mToolbar = findViewById(R.id.mToolbar);
@@ -90,12 +99,13 @@ public class RegistrationActivity extends AppCompatActivity {
         onCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String username = userName.getText().toString();
                 String email = mEmail.getText().toString();
                 String pass = mPassword.getText().toString();
                 String cPass = mConfPassword.getText().toString();
 
                 if (checkConnection(RegistrationActivity.this)){
-                    if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(cPass)) {
+                    if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(cPass)) {
                         progressDialog.show();
                         if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){
 
@@ -110,7 +120,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         }else {
                             if (pass.equals(cPass)){
 
-                                register_user(email, pass);
+                                register_user(username, email, pass);
 
                             }else {
 
@@ -140,18 +150,38 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-    private void register_user(String email, String pass) {
+    private void register_user(final String name, String email, String pass) {
 
-        mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    progressDialog.dismiss();
-                    Intent newIntent = new Intent(RegistrationActivity.this, Verification_Activity.class);
-                    newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(newIntent);
-                    finish();
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = currentUser.getUid();
+
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+
+                    HashMap<String, String> userMap = new HashMap<>();
+                    userMap.put("name", name);
+                    userMap.put("status", "Hi there, I'm using Chat up App.");
+                    userMap.put("image", "default");
+                    userMap.put("thumb_image", "default");
+                    mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+
+                                progressDialog.dismiss();
+                                Intent newIntent = new Intent(RegistrationActivity.this, Verification_Activity.class);
+                                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(newIntent);
+                                finish();
+
+                            }
+                        }
+                    });
+
 
                 } else {
 

@@ -48,7 +48,7 @@ class SectionsPageAdapter extends FragmentPagerAdapter{
 //                return null;
 //            case 2:
 //                return null;
-//            default:
+//            defaultimg:
 //                return null;
 //        }
 //    }

@@ -44,13 +44,14 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="52dp"
+                android:layout_marginTop="24dp"
                 android:paddingLeft="6dp"
                 android:text="Create a New Account"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.062"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
@@ -62,7 +63,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="24dp"
                 android:background="#2b75f2"
                 android:text="CREATE ACCOUNT"
                 android:textAlignment="center"
@@ -113,17 +114,18 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:hint="Email Address*"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/createNewAccount">
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/emailAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#DDD"
-                    android:hint="Email Address*"
                     android:inputType="textEmailAddress"
                     android:padding="13dp"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
@@ -140,6 +142,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:hint="Password*"
                 android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +153,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#DDD"
-                    android:hint="Password*"
                     android:inputType="textPassword"
                     android:padding="13dp"
                     android:textSize="14sp" />
@@ -159,10 +161,11 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayout3"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:hint="Confirm Password*"
                 android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -173,7 +176,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#DDD"
-                    android:hint="Confirm Password*"
                     android:inputType="textPassword"
                     android:padding="13dp"
                     android:textSize="14sp" />
@@ -245,6 +247,31 @@
                         app:srcCompat="@drawable/ic_launcher" />
                 </android.support.constraint.ConstraintLayout>
             </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout5"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:hint="Username*"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/createNewAccount">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#DDD"
+                    android:inputType="text"
+                    android:padding="13dp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

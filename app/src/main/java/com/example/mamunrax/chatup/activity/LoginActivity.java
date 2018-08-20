@@ -155,4 +155,10 @@ public class LoginActivity extends AppCompatActivity {
 
         return false;
     }
+
+    public void resetPassword(View view) {
+        Intent resetPassword = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+        startActivity(resetPassword);
+        finish();
+    }
 }
