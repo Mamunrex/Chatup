@@ -2,8 +2,11 @@ package com.example.mamunrax.chatup.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     FirebaseAuth mAuth;
 
+    private ViewPager mViewPager;
+    private SectionsPageAdapter mSectionsPageAdapter;
+    private TabLayout mTabLayout;
+    private Context context;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +38,18 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chat up");
+
+        //---Tabs---
+        mViewPager = findViewById(R.id.main_tabPager);
+        mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPageAdapter);
+
+        mTabLayout = findViewById(R.id.main_tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        mTabLayout.getTabAt(0).setIcon(R.drawable.chat);
+        mTabLayout.getTabAt(1).setIcon(R.drawable.friends);
+        mTabLayout.getTabAt(2).setIcon(R.drawable.request);
 
 
     }

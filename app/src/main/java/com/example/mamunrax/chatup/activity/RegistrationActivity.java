@@ -1,10 +1,13 @@
 package com.example.mamunrax.chatup.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -30,9 +33,9 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextView createNewAccount, iHaveAlreadyAccount;
     private Typeface myFont;
     private Button onCreateBtn;
-    private TextInputEditText mDisplayName;
     private TextInputEditText mEmail;
     private TextInputEditText mPassword;
+    private TextInputEditText mConfPassword;
 
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
@@ -46,9 +49,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         createNewAccount = findViewById(R.id.createNewAccount);
         iHaveAlreadyAccount = findViewById(R.id.iHaveAlreadyAccount);
-        mDisplayName = (TextInputEditText)findViewById(R.id.userName);
-        mEmail = (TextInputEditText) findViewById(R.id.email);
+        mEmail = (TextInputEditText)findViewById(R.id.emailAddress);
         mPassword = (TextInputEditText) findViewById(R.id.password);
+        mConfPassword = (TextInputEditText) findViewById(R.id.ConfirmPass);
         onCreateBtn = findViewById(R.id.signIn_Btn);
 
         mToolbar = findViewById(R.id.mToolbar);
@@ -70,7 +73,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //----ProgressDialog-------
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please wait reg...");
+        progressDialog.setTitle("Registering User");
+        progressDialog.setMessage("Please wait while we create your Account !");
         progressDialog.setCanceledOnTouchOutside(false);
 
 
@@ -86,11 +90,43 @@ public class RegistrationActivity extends AppCompatActivity {
         onCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String displayName = mDisplayName.getText().toString();
                 String email = mEmail.getText().toString();
-                String password = mPassword.getText().toString();
+                String pass = mPassword.getText().toString();
+                String cPass = mConfPassword.getText().toString();
 
-                register_user(displayName, email, password);
+                if (checkConnection(RegistrationActivity.this)){
+                    if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(cPass)) {
+                        progressDialog.show();
+                        if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){
+
+                            Toast.makeText(RegistrationActivity.this, "Invalid Email Address", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
+                        }else if(pass.length() < 6){
+
+                            Toast.makeText(RegistrationActivity.this, "You must have 6 characters in your password", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
+                        }else {
+                            if (pass.equals(cPass)){
+
+                                register_user(email, pass);
+
+                            }else {
+
+                                Toast.makeText(RegistrationActivity.this, "Password doesn't match", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+
+                            }
+                        }
+                    }else {
+                        Toast.makeText(RegistrationActivity.this, "Please Input all Fields", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                }else {
+                    Toast.makeText(RegistrationActivity.this, "Make sure your phone has an active data connection and try again", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -104,31 +140,48 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-    private void register_user(String displayName, String email, String password) {
+    private void register_user(String email, String pass) {
 
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
-            progressDialog.show();
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
+        mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
 
-                        Intent newIntent = new Intent(RegistrationActivity.this, MainActivity.class);
-                        startActivity(newIntent);
-                        finish();
-
-                    } else {
-
-                        Toast.makeText(RegistrationActivity.this, "You Got Some Error", Toast.LENGTH_SHORT).show();
-
-                    }
                     progressDialog.dismiss();
+                    Intent newIntent = new Intent(RegistrationActivity.this, Verification_Activity.class);
+                    newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(newIntent);
+                    finish();
+
+                } else {
+
+                    progressDialog.hide();
+                    String errorMessage = task.getException().getMessage();
+                    Toast.makeText(RegistrationActivity.this, "Cannot Sign In. Please check the form and try again."+errorMessage, Toast.LENGTH_SHORT).show();
+
                 }
-            });
-        }else {
-            Toast.makeText(RegistrationActivity.this, "Please Input all Fields", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
+    //-----Check Internet Connection Method------
+    public static boolean checkConnection(Context context){
+
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+        if (activeNetworkInfo != null){
+            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI){
+                return true;
+            }else if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE){
+                return true;
+            }
         }
 
+        return false;
     }
 
 }

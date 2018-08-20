@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mamunrax.chatup">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +22,9 @@
         <activity android:name=".activity.StartActivity" />
         <activity android:name=".activity.No_Internet" />
         <activity android:name=".activity.RegistrationActivity" />
-        <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.Verification_Activity" />
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>
