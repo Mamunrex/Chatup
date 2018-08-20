@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Chat up</string>
+    <string name="check_your_mobile_data_or_wifi">Check your mobile data or WiFi</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="retry">RETRY</string>
+    <string name="need_new_account">NEED NEW ACCOUNT?</string>
+    <string name="already_have_account">ALREADY HAVE ACCOUNT</string>
 </resources>
