@@ -82,10 +82,14 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         if (item.getItemId() == R.id.accoutnSetting){
+
             Intent settingActivity = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settingActivity);
         }
         if (item.getItemId() == R.id.allUsers){
+
+            Intent settingActivity1 = new Intent(MainActivity.this, UsersActivity.class);
+            startActivity(settingActivity1);
 
         }
         if (item.getItemId() == R.id.logOut){

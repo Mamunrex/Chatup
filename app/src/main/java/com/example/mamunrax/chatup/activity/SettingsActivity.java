@@ -2,6 +2,7 @@ package com.example.mamunrax.chatup.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,8 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.mamunrax.chatup.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,12 +25,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -39,12 +45,13 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     private ProgressDialog progressDialog;
     private CircleImageView mDisplayImage;
-    private TextView mName, mStatus;
+    private TextView mName, mStatus, countryTextView, workView, genderView, relationshipView, dateOfBirth;
 
     private static final int GALLERY_PICK = 1;
 
     //Storage Firebase
     private StorageReference mImageStorage;
+    private Bitmap thumb_bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,11 @@ public class SettingsActivity extends AppCompatActivity {
         mDisplayImage = findViewById(R.id.settings_image);
         mName = findViewById(R.id.settingDisplayName);
         mStatus = findViewById(R.id.settingStatus);
+        countryTextView = findViewById(R.id.countryTextView);
+        workView = findViewById(R.id.workView);
+        genderView = findViewById(R.id.genderView);
+        relationshipView = findViewById(R.id.relationshipView);
+        dateOfBirth = findViewById(R.id.dateOfBirth);
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,14 +86,27 @@ public class SettingsActivity extends AppCompatActivity {
                 String name = dataSnapshot.child("name").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
+                String live_in = dataSnapshot.child("live_in").getValue().toString();
+                String work = dataSnapshot.child("work").getValue().toString();
+                String gender = dataSnapshot.child("gender").getValue().toString();
+                String relationships = dataSnapshot.child("relationships").getValue().toString();
+                String date_of_birth = dataSnapshot.child("date_of_birth").getValue().toString();
                 String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 mName.setText(name);
                 mStatus.setText(status);
+                countryTextView.setText(live_in);
+                workView.setText(work);
+                genderView.setText(gender);
+                relationshipView.setText(relationships);
+                dateOfBirth.setText(date_of_birth);
 
-                RequestOptions placeholderRequest = new RequestOptions();
-                placeholderRequest.placeholder(R.drawable.defaultimg);
-                Glide.with(SettingsActivity.this).setDefaultRequestOptions(placeholderRequest).load(image).into(mDisplayImage);
+                if (!image.equals("default")){
+
+                    Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimg).into(mDisplayImage);
+                    //Picasso.with(SettingsActivity.this).load(image).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.defaultimg)).error(getApplicationContext().getResources().getDrawable(R.drawable.defaultimg)).into(mDisplayImage);
+
+                }
 
             }
 
@@ -95,9 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void changeStatus(View view) {
-        String status_value = mStatus.getText().toString();
         Intent editActivity = new Intent(SettingsActivity.this, Edit_Activity.class);
-        editActivity.putExtra("status_value", status_value);
         startActivity(editActivity);
     }
 
@@ -118,6 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
             Uri imageURI = data.getData();
             CropImage.activity(imageURI)
                     .setAspectRatio(1,1)
+                    .setMinCropWindowSize(500, 500)
                     .start(this);
 
         }
@@ -127,22 +151,64 @@ public class SettingsActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 Uri resultUri = result.getUri();
+                File thumb_filePath = new File(resultUri.getPath());
 
                 String currentUserId = mCurrentUser.getUid();
 
+                try {
+                    thumb_bitmap = new Compressor(this)
+                            .setMaxWidth(200)
+                            .setMaxHeight(200)
+                            .setQuality(75)
+                            .compressToBitmap(thumb_filePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream baso = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG,100, baso);
+                final byte[] thumb_byte = baso.toByteArray();
+
                 StorageReference filepath = mImageStorage.child("profile_image").child(currentUserId + ".jpg");
+                final StorageReference thumb_filePat = mImageStorage.child("profile_image").child("thumbs").child(currentUserId + ".jpg");
+
+
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    public void onComplete(@NonNull final Task<UploadTask.TaskSnapshot> task) {
 
                         if (task.isSuccessful()){
 
-                            String download_url = task.getResult().getDownloadUrl().toString();
-                            mUserDatabase.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            final String download_url = task.getResult().getDownloadUrl().toString();
+                            UploadTask uploadTask = thumb_filePat.putBytes(thumb_byte);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(SettingsActivity.this, "Success uploading", Toast.LENGTH_SHORT).show();
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
+
+                                    String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
+
+                                    if (thumb_task.isSuccessful()){
+
+                                        Map update_hasMap = new HashMap<>();
+                                        update_hasMap.put("image", download_url);
+                                        update_hasMap.put("thumb_image", thumb_downloadUrl);
+
+                                        mUserDatabase.updateChildren(update_hasMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    progressDialog.dismiss();
+                                                    Toast.makeText(SettingsActivity.this, "Success uploading", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+
+                                    }else {
+
+                                        Toast.makeText(SettingsActivity.this, "Error in uploading thumbnail", Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+
+                                    }
+
                                 }
                             });
 
@@ -159,5 +225,14 @@ public class SettingsActivity extends AppCompatActivity {
                 Exception error = result.getError();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent newIntent = new Intent(SettingsActivity.this, MainActivity.class);
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(newIntent);
+        finish();
     }
 }

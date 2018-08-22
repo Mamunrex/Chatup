@@ -7,86 +7,356 @@
     android:background="#FFFFFF"
     tools:context=".activity.SettingsActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/settings_image"
-        android:layout_width="155dp"
-        android:layout_height="148dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:src="@drawable/defaultimg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/settingDisplayName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/display_name"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="20sp"
-        android:textStyle="bold"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="226dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.032"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_image" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/settingStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/hi_there_i_m_using_chat_up_app"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingDisplayName" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/settings_image_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="92dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="76dp"
-        android:text="Change Image"
-        android:onClick="imageBtn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingStatus"
-        app:layout_constraintVertical_bias="0.151" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/settings_status_button"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="148dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Change Status"
-        android:onClick="changeStatus"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/settings_image_button"
-        app:layout_constraintTop_toBottomOf="@+id/settingStatus"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mToolbar">
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:scrollbars="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="343dp"
+                android:layout_height="319dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="64dp"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.512"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/settings_image"
+                        android:layout_width="162dp"
+                        android:layout_height="139dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/defaultimg"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+                    <TextView
+                        android:id="@+id/settingDisplayName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="28dp"
+                        android:text="@string/display_name"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/settings_image" />
+
+                    <TextView
+                        android:id="@+id/countryTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Live In"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.498"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/settingDisplayName"
+                        app:layout_constraintVertical_bias="0.15" />
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="39dp"
+                        android:layout_height="31dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:onClick="imageBtn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.983"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/addphoto" />
+
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
+                android:text="Status"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.024"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+            <TextView
+                android:id="@+id/settingStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:text="Iam the rex"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.024"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/status" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="0dp"
+                android:layout_height="161dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                android:weightSum="4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingStatus">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".9"
+                    android:background="#f5f5f5"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:lineSpacingExtra="10sp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="8dp"
+                        android:text="Work                :"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/workView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:paddingTop="8dp"
+                        android:text="Student" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".9"
+                    android:background="#fafafa"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:lineSpacingExtra="10sp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="8dp"
+                        android:text="Gender             :"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/genderView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:paddingTop="8dp"
+                        android:text="Male" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".9"
+                    android:background="#f5f5f5"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:lineSpacingExtra="10sp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="8dp"
+                        android:text="Relationship   :"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/relationshipView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:paddingTop="8dp"
+                        android:text="Single" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".9"
+                    android:background="#fafafa"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:lineSpacingExtra="10sp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="8dp"
+                        android:text="Date of Birth   :"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/dateOfBirth"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:paddingTop="8dp"
+                        android:text="00:00:00" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            |
+
+            <Button
+                android:id="@+id/settings_status_button"
+                android:layout_width="85dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimaryDark"
+                android:onClick="changeStatus"
+                android:text="Edit"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.986"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+
+
+
+
+
 
 </android.support.constraint.ConstraintLayout>

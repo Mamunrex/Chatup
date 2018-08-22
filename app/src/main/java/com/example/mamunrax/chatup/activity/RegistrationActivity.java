@@ -167,6 +167,13 @@ public class RegistrationActivity extends AppCompatActivity {
                     userMap.put("status", "Hi there, I'm using Chat up App.");
                     userMap.put("image", "default");
                     userMap.put("thumb_image", "default");
+                    userMap.put("live_in", "none");
+                    userMap.put("work", "none");
+                    userMap.put("gender", "none");
+                    userMap.put("relationships", "none");
+                    userMap.put("date_of_birth", "none");
+
+
                     mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
