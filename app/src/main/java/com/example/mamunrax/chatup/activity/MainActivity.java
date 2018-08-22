@@ -1,12 +1,14 @@
 package com.example.mamunrax.chatup.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPageAdapter mSectionsPageAdapter;
     private TabLayout mTabLayout;
     private Context context;
+
+    AlertDialog.Builder aleartDialogBuilder;
 
 
     @Override
@@ -130,6 +134,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+//        if (back_pressed + 200 > System.currentTimeMillis()){
+//            super.onBackPressed();
+//        }else {
+//            Toast.makeText(getBaseContext(), "Press once again to exit!", Toast.LENGTH_SHORT).show();
+//        }
+//        back_pressed = System.currentTimeMillis();
+        aleartDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        aleartDialogBuilder.setTitle("Confirm");
+        aleartDialogBuilder.setMessage("Do you really want to exit ?");
+        aleartDialogBuilder.setIcon(R.drawable.warning);
+        aleartDialogBuilder.setCancelable(false);
+        aleartDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        aleartDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alertDialog = aleartDialogBuilder.create();
+        alertDialog.show();
     }
 }
 

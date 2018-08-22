@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.mamunrax.chatup.R;
@@ -32,6 +33,7 @@ public class UsersActivity extends AppCompatActivity {
 
     private Typeface myFont;
     private DatabaseReference mUserDatabase;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class UsersActivity extends AppCompatActivity {
         mUserList.setHasFixedSize(true);
         mUserList.setLayoutManager(new LinearLayoutManager(this));
 
+        progressBar = findViewById(R.id.progressBar);
+
 
     }
 
@@ -64,6 +68,7 @@ public class UsersActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        progressBar.setVisibility(View.VISIBLE);
         FirebaseRecyclerAdapter<All_Users, UserViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<All_Users, UserViewHolder>(
 
                 All_Users.class,
@@ -73,21 +78,25 @@ public class UsersActivity extends AppCompatActivity {
 
         ) {
             @Override
-            protected void populateViewHolder(UserViewHolder userViewHolder, All_Users users, int position) {
+            protected void populateViewHolder(final UserViewHolder userViewHolder, All_Users users, int position) {
 
                 userViewHolder.setDisplayName(users.getName());
                 userViewHolder.setDisplayStatus(users.getStatus());
                 userViewHolder.setDisplayImage(users.getThumb_image(), getApplicationContext());
 
+                progressBar.setVisibility(View.INVISIBLE);
                 final String user_id = getRef(position).getKey();
 
                 userViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
+                        userViewHolder.mView.setEnabled(false);
                         Intent profileIntent = new Intent(UsersActivity.this, ProfileActivity.class);
                         profileIntent.putExtra("user_id", user_id);
+                        profileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(profileIntent);
+                        finish();
 
                     }
                 });
@@ -133,5 +142,14 @@ public class UsersActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent newIntent = new Intent(UsersActivity.this, MainActivity.class);
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(newIntent);
+        finish();
     }
 }

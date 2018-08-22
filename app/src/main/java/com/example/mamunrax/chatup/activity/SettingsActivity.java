@@ -25,6 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -79,12 +81,14 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser);
+        mUserDatabase.keepSynced(true);
+
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String name = dataSnapshot.child("name").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                final String image = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
                 String live_in = dataSnapshot.child("live_in").getValue().toString();
                 String work = dataSnapshot.child("work").getValue().toString();
@@ -103,8 +107,22 @@ public class SettingsActivity extends AppCompatActivity {
 
                 if (!image.equals("default")){
 
-                    Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimg).into(mDisplayImage);
-                    //Picasso.with(SettingsActivity.this).load(image).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.defaultimg)).error(getApplicationContext().getResources().getDrawable(R.drawable.defaultimg)).into(mDisplayImage);
+                    //Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimg).into(mDisplayImage);
+                    Picasso.with(SettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.defaultimg).into(mDisplayImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+                            Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimg).into(mDisplayImage);
+
+                        }
+                    });
+
 
                 }
 
