@@ -22,10 +22,14 @@ import android.widget.Toast;
 
 import com.example.mamunrax.chatup.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mUserDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         forgot_passTxt = findViewById(R.id.textView8);
         needNewAccount = findViewById(R.id.needNewAccount);
         login_button = findViewById(R.id.login_button);
+
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mEmail = (TextInputEditText)findViewById(R.id.emailAddress);
         mPassword = (TextInputEditText) findViewById(R.id.password);
@@ -102,12 +109,14 @@ public class LoginActivity extends AppCompatActivity {
                         mAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+
                                 if (task.isSuccessful()){
                                     Successful();
                                 }else {
                                     Toast.makeText(LoginActivity.this, "The Password is invalid", Toast.LENGTH_SHORT).show();
                                 }
                                 progressDialog.dismiss();
+
                             }
                         });
                     }else {
@@ -130,10 +139,22 @@ public class LoginActivity extends AppCompatActivity {
     private void Successful() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user.isEmailVerified()){
-            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(mainIntent);
-            finish();
+
+            String current_user_id = mAuth.getCurrentUser().getUid();
+            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+            mUserDatabase.child(current_user_id).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(mainIntent);
+                    finish();
+
+                }
+            });
+
         }else {
             Toast.makeText(this, "Please check your email for validation link", Toast.LENGTH_SHORT).show();
         }
